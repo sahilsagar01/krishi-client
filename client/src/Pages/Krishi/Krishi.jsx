@@ -7,16 +7,16 @@ import { KrishiNational } from "../../DummyData/NationalNews";
 import axios from "axios";
 
 function Krishi(props) {
-  const cliclCategory = props;
+  const cat_id = "64ef9e366564fe112a67f5ff";
   const [krishiData , setKrishiData] = useState([]);
-  console.log(krishiData)
+
 
 
   useEffect(() => {
 
     const fetchNews = async() =>{
       try{
-        const api = "http://localhost:5002";
+        const api = "http://localhost:5002/cat/" + cat_id;
       const krishiData = await axios.get(api);
       setKrishiData(krishiData.data)
       }
@@ -54,9 +54,26 @@ function Krishi(props) {
           </div>
         ))}
       </div>
+      {krishiData && krishiData.map((news)=> {
+        return (
+          <div id="National" className="LocalNewsKrishi">
+            <h2 className="heading"> {news.subcategory}</h2>
+            <div className="cardContainer">
+              {news.news.map((data) => (
+                <div className="card" key={data.name}>
+                  <img src={data.image} alt="Loading" />
+                  <div className="card-content">
+                    <h5>{data.name}</h5>
+                    <p>{data.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      })}
 
-      {/* National News */}
-
+      {/* 
       <div id="National" className="LocalNewsKrishi">
         <h2 className="heading">राष्ट्रीय समाचार</h2>
         <div className="cardContainer">
@@ -71,8 +88,6 @@ function Krishi(props) {
           ))}
         </div>
       </div>
-
-      {/* Pradeshik News */}
 
       <div id="Pradeshik" className="LocalNewsKrishi">
         <h2 className="heading">प्रादेशिक समाचार</h2>
@@ -89,8 +104,6 @@ function Krishi(props) {
         </div>
       </div>
 
-      {/* Corporate News */}
-
       <div id="Corporate" className="LocalNewsKrishi">
         <h2 className="heading">कारपोरेट कहानियां की गतिविधियां</h2>
         <div className="cardContainer">
@@ -105,8 +118,6 @@ function Krishi(props) {
           ))}
         </div>
       </div>
-
-      {/* Success News */}
 
       <div id="Success" className="LocalNewsKrishi">
         <h2 className="heading">सफलता की कहानी</h2>
@@ -123,8 +134,6 @@ function Krishi(props) {
         </div>
       </div>
 
-      {/* Yojnaa News */}
-
       <div id="Yojnaa" className="LocalNewsKrishi">
         <h2 className="heading">कृषि विभाग द्वारा संचालित योजनाएं</h2>
         <div className="cardContainer">
@@ -139,8 +148,6 @@ function Krishi(props) {
           ))}
         </div>
       </div>
-
-      {/* New News */}
 
       <div id="New" className="LocalNewsKrishi">
         <h2 className="heading">कृषि में हो रहे नवाचार</h2>
@@ -157,8 +164,6 @@ function Krishi(props) {
         </div>
       </div>
 
-      {/* Crops News */}
-
       <div id="Crops" className="LocalNewsKrishi">
         <h2 className="heading">फसल तकनीक</h2>
         <div className="cardContainer">
@@ -174,8 +179,6 @@ function Krishi(props) {
         </div>
       </div>
 
-      {/* Problems News */}
-
       <div id="Problems" className="LocalNewsKrishi">
         <h2 className="heading">खेती बाड़ी की समस्याओं का समाधान</h2>
         <div className="cardContainer">
@@ -190,9 +193,6 @@ function Krishi(props) {
           ))}
         </div>
       </div>
-
-      {/* machinery News */}
-
       <div id="Machinery" className="LocalNewsKrishi">
         <h2 className="heading">कृषि मशीनरी</h2>
         <div className="cardContainer">
@@ -206,7 +206,7 @@ function Krishi(props) {
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
 
       {/* Section Navigation */}
       <div className="section-navigation">

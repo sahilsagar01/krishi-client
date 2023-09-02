@@ -13,10 +13,11 @@ const PORT = 5002;
 const connectToMogodb = async (param) => {
   try {
     await mongoose.connect(
-      // process.env.DB
-      `mongodb://localhost:27017/newsDB2`
+      process.env.DB
     );
+    console.log("DB CONNECTED")
   } catch (err) {
+    console.log("DB NOT CONNECTED");
     console.log(err);
   }
 };

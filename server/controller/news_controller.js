@@ -1,4 +1,5 @@
 const News = require("../modules/News");
+const ObjectId = require("mongoose").Types.ObjectId;
 
 const addNews = async (req, res) => {
   const newNews = new News({
@@ -29,10 +30,7 @@ const getAllNews = async (req, res) => {
 };
 
 const updateNews = async (req, res) => {
-  const News = await News.findByIdAndUpdate(
-    { _id: req.params.id },
-    { $set: req.body }
-  )
+  const News = await News.findByIdAndUpdate({ _id: req.params.id }, { $set: req.body })
     .then((doc, err) => {
       res.send(doc);
     })
@@ -41,7 +39,55 @@ const updateNews = async (req, res) => {
     });
 };
 
-module.exports = { addNews, getAllNews, updateNews };
+const categoryWiseNews = async (req, res) => {
+  try {
+    const cat = req.params.cat;
+    console.log("file: news_controller.js:45  cat:", cat)
+    let news = await News.aggregate([
+      {
+        $match: {
+          category_id: new ObjectId(cat),
+        },
+      },
+      {
+        $group: {
+          _id: "$subcategory_id",
+          news: {
+            $push: {
+              name: "$name",
+              image: "$image",
+              description: "$description",
+            },
+          },
+        },
+      },
+      {
+        $lookup: {
+          from: "subcategories",
+          as: "subcategories",
+          localField: "_id",
+          foreignField: "_id",
+        },
+      },
+      {
+        $unwind: "$subcategories",
+      },
+      {
+        $project: {
+          subcategory: "$subcategories.name",
+          news: 1,
+          _id:0
+        },
+      },
+    ]);
+    res.json(news)
+  } catch (error) {
+    console.error(error);
+    res.json(error.message);
+  }
+};
+
+module.exports = { addNews, getAllNews, updateNews, categoryWiseNews };
 
 // const loginNews = async (req, res) => {
 //   console.log(req.body);
